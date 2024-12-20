@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 from datetime import datetime
 
 class Logger:
@@ -15,12 +16,17 @@ class Logger:
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
         
-        # 创建文件处理器
-        file_handler = logging.FileHandler(log_file, encoding='utf-8')
+        # 设置控制台编码
+        if sys.platform == 'win32':
+            sys.stdout.reconfigure(encoding='utf-8')
+            sys.stderr.reconfigure(encoding='utf-8')
+        
+        # 创建文件处理器，使用 utf-8-sig 编码（带 BOM）
+        file_handler = logging.FileHandler(log_file, encoding='utf-8-sig', mode='a')
         file_handler.setLevel(logging.INFO)
         
         # 创建控制台处理器
-        console_handler = logging.StreamHandler()
+        console_handler = logging.StreamHandler(sys.stdout)
         console_handler.setLevel(logging.INFO)
         
         # 设置日志格式
@@ -32,9 +38,10 @@ class Logger:
         file_handler.setFormatter(formatter)
         console_handler.setFormatter(formatter)
         
-        # 添加处理器
-        self.logger.addHandler(file_handler)
-        self.logger.addHandler(console_handler)
+        # 避免重复添加处理器
+        if not self.logger.handlers:
+            self.logger.addHandler(file_handler)
+            self.logger.addHandler(console_handler)
     
     def info(self, msg: str):
         self.logger.info(msg)
