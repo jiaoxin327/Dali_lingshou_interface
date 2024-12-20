@@ -1,101 +1,101 @@
 import requests
-import json
-from typing import List, Dict
-from datetime import datetime
-import urllib3
-
-# 禁用SSL警告
-urllib3.disable_warnings()
+from typing import Dict, Any, Optional, List
 
 class RetailAPI:
-    """
-    零售数据上报API客户端
-    用于处理与服务器的所有交互，包括登录认证和数据上报
-    """
-    
     def __init__(self, base_url: str):
-        self.base_url = base_url.rstrip('/')
+        self.base_url = base_url
         self.token = None
-    
+        # 设置请求超时和禁用代理
+        self.session = requests.Session()
+        self.session.trust_env = False  # 禁用环境变量中的代理设置
+        self.timeout = 30  # 增加超时时间到30秒
+        
     def login(self, username: str, password: str) -> bool:
-        """用户登录并获取访问token"""
+        """登录并获取token"""
         url = f"{self.base_url}/token/grant"
-        
-        # 设置请求头
-        headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json',
-            'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
-            'User-Agent': 'Mozilla/5.0'
-        }
-        
-        # 登录数据
-        data = {
-            "username": username,
-            "password": password  # 使用明文密码，让服务器处理加密
-        }
+        print(f"正在尝试登录: {url}")
+        print(f"用户名: {username}")
         
         try:
-            print(f"正在尝试登录: {url}")
-            print(f"用户名: {username}")
-            
-            response = requests.post(
+            response = self.session.post(
                 url,
-                data=data,
-                headers=headers,
-                verify=False,  # 不验证SSL证书
-                timeout=5
+                data={
+                    "username": username,
+                    "password": password
+                },
+                headers={
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                timeout=self.timeout,
+                verify=False
             )
             
-            print(f"服务器响应状态码: {response.status_code}")
-            print(f"服务器响应内容: {response.text}")
+            print(f"响应状态码: {response.status_code}")
+            print(f"响应内容: {response.text}")
             
             if response.status_code == 200:
                 result = response.json()
                 if result.get("code") == 200:
-                    self.token = result.get("token")
-                    print(f"登录成功！Token: {self.token[:30]}...")
+                    self.token = f"Bearer {result.get('token')}"
+                    print(f"获取到token: {self.token}")
                     return True
                 else:
-                    print(f"登录失败，错误信息: {result.get('msg')}")
+                    print(f"登录失败: {result.get('msg')}")
+                    return False
             else:
-                print(f"HTTP请求失败，状态码: {response.status_code}")
+                print(f"HTTP错误: {response.status_code}")
+                return False
+                
+        except requests.exceptions.Timeout:
+            print("连接超时")
+            return False
+        except requests.exceptions.RequestException as e:
+            print(f"请求异常: {str(e)}")
             return False
         except Exception as e:
             print(f"其他异常: {str(e)}")
             return False
-    
-    def upload_retail_data(self, retail_data: List[Dict]) -> Dict:
-        """上报零售数据到服务器"""
-        if not self.token:
-            raise Exception("请先登录获取token")
             
-        url = f"{self.base_url}/dc/api/v1/collection/retail"
+    def upload_retail_data(self, data: List[Dict]) -> Optional[Dict]:
+        """上报零售数据"""
+        if not self.token:
+            print("未登录，请先调用login方法")
+            return None
         
-        # 设置请求头
+        url = f"{self.base_url}/dc/api/v1/collection/retail"
+        print(f"开始上报数据到: {url}")
+        print(f"使用token: {self.token}")
+        
         headers = {
-            'Authorization': f'Bearer {self.token}',
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'User-Agent': 'Mozilla/5.0'
+            'Authorization': self.token
         }
         
         try:
-            print(f"正在上报数据到: {url}")
-            print("请求数据:", json.dumps(retail_data, ensure_ascii=False, indent=2))
+            print(f"上报数据示例: {data[0] if data else 'No data'}")
+            print(f"上报数据条数: {len(data)}")
             
-            response = requests.post(
+            response = self.session.post(
                 url,
-                json=retail_data,  # 使用json参数自动处理JSON序列化
+                json=data,
                 headers=headers,
-                verify=False,  # 不验证SSL证书
-                timeout=5
+                timeout=self.timeout,
+                verify=False
             )
             
-            print(f"服务器响应状态码: {response.status_code}")
-            print("服务器响应内容:", json.dumps(response.json(), ensure_ascii=False, indent=2))
+            print(f"响应状态码: {response.status_code}")
+            print(f"响应内容: {response.text}")
             
-            return response.json()
+            if response.status_code == 200:
+                result = response.json()
+                print(f"上报结果: {result}")
+                return result
+            else:
+                print(f"上报失败: HTTP {response.status_code}")
+                print(f"错误信息: {response.text}")
+                return None
+                
         except Exception as e:
-            print(f"上报数据失败: {str(e)}")
+            print(f"上报异常: {str(e)}")
+            print(f"异常类型: {type(e)}")
             return None 

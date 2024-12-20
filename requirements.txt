@@ -1,3 +1,5 @@
 # HTTP请求库，用于与服务器进行通信
 requests>=2.25.1
 urllib3>=2.0.0
+mysql-connector-python>=8.0.26
+schedule>=1.1.0
