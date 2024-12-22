@@ -1,0 +1,6 @@
+Looking in indexes: https://pypi.tuna.tsinghua.edu.cn/simple
+Collecting openpyxl
+  Downloading https://pypi.tuna.tsinghua.edu.cn/packages/c0/da/977ded879c29cbd04de313843e76868e6e13408a94ed6b987245dc7c8506/openpyxl-3.1.5-py2.py3-none-any.whl (250 kB)
+Requirement already satisfied: et-xmlfile in d:\soft\python\python313\lib\site-packages (from openpyxl) (2.0.0)
+Installing collected packages: openpyxl
+Successfully installed openpyxl-3.1.5

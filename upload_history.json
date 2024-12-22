@@ -1,0 +1,78 @@
+[
+    {
+        "upload_time": "2024-12-22 20:28:27",
+        "status": "成功",
+        "data_count": 4,
+        "message": "[{'soureId': 'YN20241222000000', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "Excel导入"
+    },
+    {
+        "upload_time": "2024-12-22 20:09:55",
+        "status": "成功",
+        "data_count": 16,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000009', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000010', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000011', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000012', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000013', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000014', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000015', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000016', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 20:09:50",
+        "status": "成功",
+        "data_count": 16,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000009', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000010', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000011', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000012', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000013', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000014', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000015', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000016', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 20:06:04",
+        "status": "成功",
+        "data_count": 4,
+        "message": "[{'soureId': 'YN20241222000000', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "Excel导入"
+    },
+    {
+        "upload_time": "2024-12-22 19:57:34",
+        "status": "成功",
+        "data_count": 4,
+        "message": "[{'soureId': 'YN20241222000000', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "Excel导入"
+    },
+    {
+        "upload_time": "2024-12-22 19:43:14",
+        "status": "成功",
+        "data_count": 4,
+        "message": "[{'soureId': 'YN20241222000000', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "Excel导入"
+    },
+    {
+        "upload_time": "2024-12-22 19:28:00",
+        "status": "成功",
+        "data_count": 16,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000009', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000010', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000011', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000012', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000013', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000014', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000015', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000016', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null
+    },
+    {
+        "upload_time": "2024-12-22 19:12:11",
+        "status": "成功",
+        "data_count": 16,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000009', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000010', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000011', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000012', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000013', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000014', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000015', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000016', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null
+    },
+    {
+        "upload_time": "2024-12-22 19:11:29",
+        "status": "成功",
+        "data_count": 16,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000009', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000010', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000011', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000012', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000013', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000014', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000015', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000016', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null
+    },
+    {
+        "upload_time": "2024-12-22 18:48:51",
+        "status": "成功",
+        "data_count": 16,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000009', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000010', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000011', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000012', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000013', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000014', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000015', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000016', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null
+    }
+]

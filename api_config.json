@@ -1,0 +1,121 @@
+{
+    "fields": [
+        {
+            "name": "统一社会信用代码",
+            "api_field": "socialCreditCode",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "企业名称",
+            "api_field": "compName",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "零售点编码",
+            "api_field": "retailStoreCode",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "零售点名称",
+            "api_field": "retailStoreName",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "上报日期",
+            "api_field": "reportDate",
+            "type": "date",
+            "required": true
+        },
+        {
+            "name": "商品编码",
+            "api_field": "selfCommondityCode",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "商品名称",
+            "api_field": "selfCommondityName",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "单位",
+            "api_field": "unit",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "规格",
+            "api_field": "spec",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "条码",
+            "api_field": "barcode",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "数据类型",
+            "api_field": "dataType",
+            "type": "int",
+            "required": true,
+            "description": "1期初库存、2入库量、3销售量、4价格"
+        },
+        {
+            "name": "数据值",
+            "api_field": "dataValue",
+            "type": "float",
+            "required": true
+        },
+        {
+            "name": "转换标志",
+            "api_field": "dataConvertFlag",
+            "type": "int",
+            "required": true,
+            "description": "默认值2"
+        },
+        {
+            "name": "供应商编码",
+            "api_field": "supplierCode",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "供应商名称",
+            "api_field": "supplierName",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "生产商名称",
+            "api_field": "manufatureName",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "产地编码",
+            "api_field": "originCode",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "产地名称",
+            "api_field": "originName",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "场景标志",
+            "api_field": "sceneflag",
+            "type": "int",
+            "required": true,
+            "description": "默认值1"
+        }
+    ]
+}

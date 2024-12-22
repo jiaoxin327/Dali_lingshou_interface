@@ -1,0 +1,45 @@
+{
+    "database": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "Ces123456",
+        "database": "retail_report"
+    },
+    "api": {
+        "url": "http://49.235.172.155:3727/supply-security-api",
+        "username": "SFJRPA1234",
+        "password": "Dlbg@123"
+    },
+    "schedule": {
+        "enabled": false,
+        "time": "09:00"
+    },
+    "table_mapping": {
+        "table_name": "retail_data",
+        "fields": {
+            "social_credit_code": "socialCreditCode",
+            "comp_name": "compName",
+            "retail_store_code": "retailStoreCode",
+            "retail_store_name": "retailStoreName",
+            "report_date": "reportDate",
+            "commodity_code": "selfCommondityCode",
+            "commodity_name": "selfCommondityName",
+            "unit": "unit",
+            "spec": "spec",
+            "barcode": "barcode",
+            "data_type": "dataType",
+            "data_value": "dataValue",
+            "data_convert_flag": "dataConvertFlag",
+            "standard_commodity_code": "standardCommondityCode",
+            "standard_commodity_name": "standardCommondityName",
+            "package_name": "packageName",
+            "supplier_code": "supplierCode",
+            "supplier_name": "supplierName",
+            "manufacturer": "manufatureName",
+            "origin_code": "originCode",
+            "origin_name": "originName",
+            "scene_flag": "sceneflag"
+        }
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": "默认配置",
+            "fields": [
+                {
+                    "name": "统一社会信用代码",
+                    "api_field": "socialCreditCode",
+                    "type": "string",
+                    "required": true
+                }
+            ]
+        }
+    ]
+}

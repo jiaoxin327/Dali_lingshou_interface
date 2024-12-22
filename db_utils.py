@@ -1,15 +1,17 @@
 import mysql.connector
 from typing import List, Dict
 from datetime import datetime
+import json
+from decimal import Decimal
 
 class DatabaseConnection:
-    def __init__(self, host: str, user: str, password: str, database: str):
+    def __init__(self, host: str, user: str, password: str, database: str, port: int = 3306):
         self.config = {
             'host': host,
             'user': user,
             'password': password,
             'database': database,
-            'port': 3306,
+            'port': port,
             'connect_timeout': 10,
             'use_pure': True,  # 使用纯Python实现
             'charset': 'utf8mb4',
@@ -124,52 +126,63 @@ class DatabaseConnection:
             self.connect()
             
         try:
+            # 加载字段映射配置
+            with open('config.json', 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                mapping_config = config.get('table_mapping', {})
+                table_name = mapping_config.get('table_name', 'retail_data')
+                
+                # 验证表名
+                if not table_name or not table_name.replace('_', '').isalnum():
+                    print(f"无效的表名: {table_name}，使用默认表名: retail_data")
+                    table_name = 'retail_data'
+                    
+                field_mappings = mapping_config.get('fields', {})
+                if not field_mappings:
+                    raise ValueError("字段映射配置为空")
+            
             cursor = self.conn.cursor(dictionary=True)
-            query = """
+            
+            # 验证表是否存在
+            cursor.execute(f"SHOW TABLES LIKE '{table_name}'")
+            if not cursor.fetchone():
+                print(f"表 {table_name} 不存在，使用默认表名: retail_data")
+                table_name = 'retail_data'
+            
+            # 动态构建SQL查询
+            field_list = []
+            for db_field, api_field in field_mappings.items():
+                if db_field == 'report_date':
+                    field_list.append(f"DATE_FORMAT({db_field}, '%Y-%m-%d') as {api_field}")
+                else:
+                    field_list.append(f"{db_field} as {api_field}")
+                
+            query = f"""
                 SELECT 
                     CONCAT('YN', DATE_FORMAT(report_date, '%Y%m%d'), LPAD(id, 6, '0')) as itemId,
-                    social_credit_code as socialCreditCode,
-                    comp_name as compName,
-                    retail_store_code as retailStoreCode,
-                    retail_store_name as retailStoreName,
-                    report_date as reportDate,
-                    commodity_code as selfCommondityCode,
-                    commodity_name as selfCommondityName,
-                    unit,
-                    spec,
-                    barcode,
-                    data_type as dataType,
-                    data_value as dataValue,
-                    data_convert_flag as dataConvertFlag,
-                    standard_commodity_code as standardCommondityCode,
-                    standard_commodity_name as standardCommondityName,
-                    package_name as packageName,
-                    supplier_code as supplierCode,
-                    supplier_name as supplierName,
-                    manufacturer as manufatureName,
-                    origin_code as originCode,
-                    origin_name as originName,
-                    scene_flag as sceneflag
-                FROM retail_data
+                    {', '.join(field_list)}
+                FROM {table_name}
                 WHERE report_date = CURDATE()
             """
+            
+            print(f"执行SQL查询: {query}")  # 添加日志
             cursor.execute(query)
             results = cursor.fetchall()
             
-            # 处理日期和Decimal类型
+            # 处理数据类型
             processed_results = []
             for row in results:
                 processed_row = {}
                 for key, value in row.items():
-                    if key == 'reportDate':
+                    if isinstance(value, datetime):
                         processed_row[key] = value.strftime('%Y-%m-%d')
-                    elif key == 'dataValue':
-                        processed_row[key] = float(value)  # 转换Decimal为float
+                    elif isinstance(value, Decimal):
+                        processed_row[key] = float(value)
                     else:
                         processed_row[key] = value
                 processed_results.append(processed_row)
             
-            print(f"处理后的数据示例: {processed_results[0] if processed_results else 'No data'}")
+            print(f"获取到 {len(processed_results)} 条数据")  # 添加日志
             return processed_results
             
         except Exception as e:

@@ -1,0 +1,11 @@
+Collecting PyQt5
+  Using cached PyQt5-5.15.11-cp38-abi3-win_amd64.whl.metadata (2.1 kB)
+Collecting PyQt5-sip<13,>=12.15 (from PyQt5)
+  Using cached PyQt5_sip-12.16.1-cp313-cp313-win_amd64.whl.metadata (439 bytes)
+Collecting PyQt5-Qt5<5.16.0,>=5.15.2 (from PyQt5)
+  Using cached PyQt5_Qt5-5.15.2-py3-none-win_amd64.whl.metadata (552 bytes)
+Using cached PyQt5-5.15.11-cp38-abi3-win_amd64.whl (6.9 MB)
+Using cached PyQt5_Qt5-5.15.2-py3-none-win_amd64.whl (50.1 MB)
+Using cached PyQt5_sip-12.16.1-cp313-cp313-win_amd64.whl (57 kB)
+Installing collected packages: PyQt5-Qt5, PyQt5-sip, PyQt5
+Successfully installed PyQt5-5.15.11 PyQt5-Qt5-5.15.2 PyQt5-sip-12.16.1

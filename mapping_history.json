@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "name": "示例配置",
+            "table_name": "retail_data",
+            "fields": {
+                "social_credit_code": "socialCreditCode",
+                "comp_name": "compName",
+                "retail_store_code": "retailStoreCode"
+            }
+        }
+    ]
+} 
