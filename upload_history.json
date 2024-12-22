@@ -1,5 +1,205 @@
 [
     {
+        "upload_time": "2024-12-22 23:21:13",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:31",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:31",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:31",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:31",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:31",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:31",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:31",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:29",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:29",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:19:22",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:18:15",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:18:10",
+        "status": "成功",
+        "data_count": 8,
+        "message": "成功上报 8 条数据",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:16:34",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:16:29",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:16:25",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 23:15:59",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "手动上报"
+    },
+    {
+        "upload_time": "2024-12-22 22:59:43",
+        "status": "失败",
+        "data_count": 0,
+        "message": "执行出错",
+        "error_detail": "DatabaseConnection.__init__() got an unexpected keyword argument 'type'",
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 22:59:39",
+        "status": "失败",
+        "data_count": 0,
+        "message": "执行出错",
+        "error_detail": "DatabaseConnection.__init__() got an unexpected keyword argument 'type'",
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 22:59:29",
+        "status": "失败",
+        "data_count": 0,
+        "message": "执行出错",
+        "error_detail": "DatabaseConnection.__init__() got an unexpected keyword argument 'type'",
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 22:45:50",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 21:48:00",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 21:41:34",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 21:16:04",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "接口导入"
+    },
+    {
+        "upload_time": "2024-12-22 21:03:37",
+        "status": "成功",
+        "data_count": 8,
+        "message": "[{'soureId': 'YN20241222000001', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000002', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000003', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000004', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000005', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000006', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000007', 'code': '1', 'msg': 'success！'}, {'soureId': 'YN20241222000008', 'code': '1', 'msg': 'success！'}]",
+        "error_detail": null,
+        "source": "接口导入"
+    },
+    {
         "upload_time": "2024-12-22 20:28:27",
         "status": "成功",
         "data_count": 4,

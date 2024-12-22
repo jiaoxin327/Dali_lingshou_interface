@@ -5,13 +5,18 @@
 
 ## 环境要求
 - Python 3.6+
-- MySQL 5.7+
-- Windows 系统（批处理脚本支持）
+- MySQL 5.7+ 或 SQL Server 2014+
+- Windows 系统
 - 依赖包：
   - requests>=2.25.1
   - urllib3>=2.0.0
   - mysql-connector-python>=8.0.26
+  - pyodbc>=4.0.39  # SQL Server支持
   - schedule>=1.1.0
+  - PyQt5>=5.15.0
+  - pandas>=2.2.3
+  - openpyxl>=3.1.0
+  - xlrd>=2.0.1
 
 ## 快速开始
 
@@ -55,7 +60,7 @@ stop_scheduler.bat
 ```
 ├── main.py              # 主程序入口
 ├── scheduler.py         # 定时任务
-├── db_utils.py         # 数据���操作工具
+├── db_utils.py         # 数据操作工具
 ├── retail_api.py       # API接口封装
 ├── requirements.txt    # 依赖包列表
 ├── utils/
@@ -298,3 +303,38 @@ schedule.every().hour.at(":01").do(job)
 2. 请确保数据准确性
 3. 及时备份重要数据
 4. 遵守相关法律法规
+
+## 数据库配置
+### MySQL
+```json
+{
+    "database": {
+        "type": "mysql",
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "your_password",
+        "database": "retail_report"
+    }
+}
+```
+
+### SQL Server
+```json
+{
+    "database": {
+        "type": "sqlserver",
+        "host": "localhost",
+        "port": 1433,
+        "user": "sa",
+        "password": "your_password",
+        "database": "retail_report"
+    }
+}
+```
+
+## SQL Server注意事项
+1. 确保已安装SQL Server ODBC驱动
+2. 启用SQL Server身份验证模式
+3. 确保用户有足够的数据库权限
+4. 检查SQL Server网络配置是否允许TCP/IP连接

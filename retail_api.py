@@ -3,8 +3,9 @@ from typing import Dict, Any, Optional, List
 
 class RetailAPI:
     def __init__(self, base_url: str):
-        self.base_url = base_url
+        self.base_url = base_url.rstrip('/')  # 移除末尾的斜杠
         self.token = None
+        self.upload_path = '/dc/api/v1/collection/retail'  # 默认上报路径
         # 设置请求超时和禁用代理
         self.session = requests.Session()
         self.session.trust_env = False  # 禁用环境变量中的代理设置
@@ -62,7 +63,7 @@ class RetailAPI:
             print("未登录，请先调用login方法")
             return None
         
-        url = f"{self.base_url}/dc/api/v1/collection/retail"
+        url = f"{self.base_url}{self.upload_path}"  # 使用配置的上报路径
         print(f"开始上报数据到: {url}")
         print(f"使用token: {self.token}")
         

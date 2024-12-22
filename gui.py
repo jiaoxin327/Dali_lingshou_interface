@@ -146,256 +146,158 @@ class WorkerThread(QThread):
                 db.close()
 
 class ConfigTab(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.initUI()
-        self.loadConfig()
-        
-    def initUI(self):
+    def __init__(self):
+        super().__init__()
+        self.init_ui()
+        self.load_config()
+
+    def init_ui(self):
         layout = QVBoxLayout()
         
         # 数据库配置组
         db_group = QGroupBox("数据库配置")
-        db_layout = QFormLayout()
+        form_layout = QFormLayout()
         
-        self.db_host = QLineEdit()
-        self.db_port = QLineEdit()
-        self.db_user = QLineEdit()
-        self.db_password = QLineEdit()
-        self.db_name = QLineEdit()
+        # 数据库类型选择
+        self.db_type_combo = QComboBox()
+        self.db_type_combo.addItems(['MySQL', 'SQL Server'])
+        self.db_type_combo.currentTextChanged.connect(self.on_db_type_changed)
+        form_layout.addRow("数据库类型:", self.db_type_combo)
         
-        self.db_password.setEchoMode(QLineEdit.Password)
+        # 数据库连接配置
+        self.host_edit = QLineEdit()
+        self.port_edit = QLineEdit()
+        self.user_edit = QLineEdit()
+        self.password_edit = QLineEdit()
+        self.password_edit.setEchoMode(QLineEdit.Password)
+        self.database_edit = QLineEdit()
         
-        db_layout.addRow("主机:", self.db_host)
-        db_layout.addRow("端口:", self.db_port)
-        db_layout.addRow("用户名:", self.db_user)
-        db_layout.addRow("密码:", self.db_password)
-        db_layout.addRow("数据库名:", self.db_name)
+        form_layout.addRow("主机地址:", self.host_edit)
+        form_layout.addRow("端口:", self.port_edit)
+        form_layout.addRow("用户名:", self.user_edit)
+        form_layout.addRow("密码:", self.password_edit)
+        form_layout.addRow("数据库名:", self.database_edit)
         
-        # 添加数据测试按钮
-        db_test_button = QPushButton("测试数据库连接")
-        db_test_button.clicked.connect(self.test_db_connection)
-        db_test_button.setStyleSheet('''
-            QPushButton {
-                background-color: #2196F3;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-            }
-            QPushButton:hover {
-                background-color: #1976D2;
-            }
-        ''')
-        db_layout.addRow("", db_test_button)
+        # 测试连接按钮
+        test_btn = QPushButton("测试连接")
+        test_btn.clicked.connect(self.test_connection)
+        form_layout.addRow("", test_btn)
         
-        db_group.setLayout(db_layout)
+        db_group.setLayout(form_layout)
+        layout.addWidget(db_group)
         
         # API配置组
         api_group = QGroupBox("API配置")
         api_layout = QFormLayout()
         
-        self.api_url = QLineEdit()
-        self.api_username = QLineEdit()
-        self.api_password = QLineEdit()
+        self.api_url_edit = QLineEdit()
+        self.api_username_edit = QLineEdit()
+        self.api_password_edit = QLineEdit()
+        self.api_password_edit.setEchoMode(QLineEdit.Password)
         
-        self.api_password.setEchoMode(QLineEdit.Password)
-        
-        api_layout.addRow("API地址:", self.api_url)
-        api_layout.addRow("用户名:", self.api_username)
-        api_layout.addRow("密码:", self.api_password)
-        
-        # 添加API测试按钮
-        api_test_button = QPushButton("测试API连接")
-        api_test_button.clicked.connect(self.test_api_connection)
-        api_test_button.setStyleSheet('''
-            QPushButton {
-                background-color: #2196F3;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-            }
-            QPushButton:hover {
-                background-color: #1976D2;
-            }
-        ''')
-        api_layout.addRow("", api_test_button)
+        api_layout.addRow("API地址:", self.api_url_edit)
+        api_layout.addRow("用户名:", self.api_username_edit)
+        api_layout.addRow("密码:", self.api_password_edit)
         
         api_group.setLayout(api_layout)
-        
-        # 按钮布局
-        button_layout = QHBoxLayout()
-        
-        # 保存按��
-        save_button = QPushButton("保存配置")
-        save_button.clicked.connect(self.saveConfig)
-        save_button.setStyleSheet('''
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-                min-width: 100px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-        ''')
-        
-        # 测试全部按钮
-        test_all_button = QPushButton("测试全部连接")
-        test_all_button.clicked.connect(self.test_all_connections)
-        test_all_button.setStyleSheet('''
-            QPushButton {
-                background-color: #2196F3;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-                min-width: 100px;
-            }
-            QPushButton:hover {
-                background-color: #1976D2;
-            }
-        ''')
-        
-        button_layout.addWidget(save_button)
-        button_layout.addWidget(test_all_button)
-        
-        layout.addWidget(db_group)
         layout.addWidget(api_group)
-        layout.addLayout(button_layout)
-        layout.addStretch()
+        
+        # 保存按钮
+        save_btn = QPushButton("保存配置")
+        save_btn.clicked.connect(self.save_config)
+        layout.addWidget(save_btn)
         
         self.setLayout(layout)
-        
-    def test_db_connection(self):
+
+    def on_db_type_changed(self, db_type):
+        """数据库类型变更处理"""
+        if db_type == 'MySQL':
+            self.port_edit.setText('3306')
+        else:
+            self.port_edit.setText('1433')
+
+    def test_connection(self):
         """测试数据库连接"""
         try:
-            # 确保端口号是整数
-            try:
-                port = int(self.db_port.text()) if self.db_port.text() else 3306
-            except ValueError:
-                QMessageBox.warning(self, "错误", "端口号必须是数字！")
-                return
+            # 获取当前配置
+            db_type = self.db_type_combo.currentText().lower().replace(' ', '')
+            host = self.host_edit.text()
+            port = int(self.port_edit.text())
+            user = self.user_edit.text()
+            password = self.password_edit.text()
+            database = self.database_edit.text()
             
-            db_config = {
-                'host': self.db_host.text(),
-                'port': port,
-                'user': self.db_user.text(),
-                'password': self.db_password.text(),
-                'database': self.db_name.text()
-            }
+            # 创建数据库连接
+            db = DatabaseConnection(
+                host=host,
+                user=user,
+                password=password,
+                database=database,
+                port=port,
+                db_type=db_type  # 参数名从 type 改为 db_type
+            )
             
-            db = DatabaseConnection(**db_config)
+            # 测试连接
             if db.test_connection():
                 QMessageBox.information(self, "成功", "数据库连接测试成功！")
             else:
-                QMessageBox.warning(self, "错误", "数据库连接测试失败！")
+                QMessageBox.warning(self, "失败", "数据库连接测试失败！")
+                
         except Exception as e:
-            QMessageBox.critical(self, "错误", f"数据库连接测试出错：{str(e)}")
-            
-    def test_api_connection(self):
-        """测试API连接"""
+            QMessageBox.critical(self, "错误", f"连接测试异常: {str(e)}")
+
+    def load_config(self):
+        """加载配置"""
         try:
-            api = RetailAPI(self.api_url.text())
-            if api.login(self.api_username.text(), self.api_password.text()):
-                QMessageBox.information(self, "成功", "API连接测试成功！")
-            else:
-                QMessageBox.warning(self, "错误", "API连接测试失败！")
-        except Exception as e:
-            QMessageBox.critical(self, "错误", f"API连接测试出错：{str(e)}")
-            
-    def test_all_connections(self):
-        """测试所有连接"""
-        # 测试数据库连接
-        try:
-            db_config = {
-                'host': self.db_host.text(),
-                'port': int(self.db_port.text() or 3306),
-                'user': self.db_user.text(),
-                'password': self.db_password.text(),
-                'database': self.db_name.text()
-            }
-            
-            db = DatabaseConnection(**db_config)
-            db_success = db.test_connection()
-        except Exception as e:
-            db_success = False
-            db_error = str(e)
-            
-        # 测试API连接
-        try:
-            api = RetailAPI(self.api_url.text())
-            api_success = api.login(self.api_username.text(), self.api_password.text())
-        except Exception as e:
-            api_success = False
-            api_error = str(e)
-            
-        # 显示测试结果
-        result_message = "连接测试结果：\n\n"
-        result_message += f"数据库连接: {'成功' if db_success else '失败'}\n"
-        if not db_success:
-            result_message += f"数据库错误: {db_error if 'db_error' in locals() else '连接失败'}\n\n"
-            
-        result_message += f"API连接: {'成功' if api_success else '失败'}\n"
-        if not api_success:
-            result_message += f"API错误: {api_error if 'api_error' in locals() else '连接失败'}\n"
-            
-        if db_success and api_success:
-            QMessageBox.information(self, "成功", "所有连接测试成功！")
-        else:
-            QMessageBox.warning(self, "错误", result_message)
-        
-    def loadConfig(self):
-        """加载配置文件"""
-        config_file = 'config.json'
-        if os.path.exists(config_file):
-            try:
-                with open(config_file, 'r', encoding='utf-8') as f:
+            if os.path.exists('config.json'):
+                with open('config.json', 'r', encoding='utf-8') as f:
                     config = json.load(f)
                     
-                # 设置数据库配置
-                db_config = config.get('database', {})
-                self.db_host.setText(db_config.get('host', 'localhost'))
-                self.db_port.setText(str(db_config.get('port', '3306')))
-                self.db_user.setText(db_config.get('user', 'root'))
-                self.db_password.setText(db_config.get('password', ''))
-                self.db_name.setText(db_config.get('database', 'retail_report'))
-                
-                # 设置API配置
-                api_config = config.get('api', {})
-                self.api_url.setText(api_config.get('url', 'http://49.235.172.155:3727/supply-security-api'))
-                self.api_username.setText(api_config.get('username', 'SFJRPA1234'))
-                self.api_password.setText(api_config.get('password', ''))
-            except Exception as e:
-                QMessageBox.warning(self, "错误", f"加载配置文件失败: {str(e)}")
-                
-    def saveConfig(self):
-        """保存配置到文件"""
-        config = {
-            'database': {
-                'host': self.db_host.text(),
-                'port': int(self.db_port.text() or 3306),
-                'user': self.db_user.text(),
-                'password': self.db_password.text(),
-                'database': self.db_name.text()
-            },
-            'api': {
-                'url': self.api_url.text(),
-                'username': self.api_username.text(),
-                'password': self.api_password.text()
-            }
-        }
-        
+                    # 数据库配置
+                    db_config = config.get('database', {})
+                    self.db_type_combo.setCurrentText(db_config.get('type', 'MySQL').title())
+                    self.host_edit.setText(db_config.get('host', 'localhost'))
+                    self.port_edit.setText(str(db_config.get('port', 3306)))
+                    self.user_edit.setText(db_config.get('user', ''))
+                    self.password_edit.setText(db_config.get('password', ''))
+                    self.database_edit.setText(db_config.get('database', ''))
+                    
+                    # API配置
+                    api_config = config.get('api', {})
+                    self.api_url_edit.setText(api_config.get('url', ''))
+                    self.api_username_edit.setText(api_config.get('username', ''))
+                    self.api_password_edit.setText(api_config.get('password', ''))
+                    
+        except Exception as e:
+            QMessageBox.warning(self, "错误", f"加载配置失败: {str(e)}")
+
+    def save_config(self):
+        """保存配置"""
         try:
+            config = {
+                'database': {
+                    'type': self.db_type_combo.currentText().lower().replace(' ', ''),
+                    'host': self.host_edit.text(),
+                    'port': int(self.port_edit.text()),
+                    'user': self.user_edit.text(),
+                    'password': self.password_edit.text(),
+                    'database': self.database_edit.text()
+                },
+                'api': {
+                    'url': self.api_url_edit.text(),
+                    'username': self.api_username_edit.text(),
+                    'password': self.api_password_edit.text()
+                }
+            }
+            
+            # 保存到文件
             with open('config.json', 'w', encoding='utf-8') as f:
                 json.dump(config, f, indent=4, ensure_ascii=False)
+                
             QMessageBox.information(self, "成功", "配置保存成功！")
+            
         except Exception as e:
-            QMessageBox.warning(self, "错误", f"保存配置文件失败: {str(e)}")
+            QMessageBox.warning(self, "错误", f"保存配置失败: {str(e)}")
 
 class ScheduleTab(QWidget):
     def __init__(self, parent=None):
@@ -406,14 +308,14 @@ class ScheduleTab(QWidget):
         self.initUI()
         
     def set_main_window(self, main_window):
-        """���置主窗口引用"""
+        """设置主窗口引用"""
         self.main_window = main_window
         
     def initUI(self):
         layout = QVBoxLayout()
         
         # 定时任务配置组
-        schedule_group = QGroupBox("���配置")
+        schedule_group = QGroupBox("配置")
         schedule_layout = QFormLayout()
         
         # 启用定时任务复选框
@@ -514,7 +416,7 @@ class ScheduleTab(QWidget):
         if not self.timer:
             self.timer = QTimer()
             self.timer.timeout.connect(self.check_schedule)
-        self.timer.start(1000)  # 每秒检查一次
+        self.timer.start(1000)  # 每秒检查一�����
         
         self.status_label.setText("定时任务已启动")
         self.status_label.setStyleSheet("color: green;")
@@ -553,7 +455,7 @@ class ScheduleTab(QWidget):
         """更新下次运行时间显示"""
         next_run = schedule.next_run()
         if next_run:
-            self.next_run_label.setText(next_run.strftime("%Y-%m-%d %H:%M:%S"))
+            self.next_run_label.setText(nextrun.strftime("%Y-%m-%d %H:%M:%S"))
         else:
             self.next_run_label.setText("-")
 
@@ -804,7 +706,7 @@ class TableMappingTab(QWidget):
         table_layout.setContentsMargins(0, 0, 0, 0)
         table_layout.addWidget(self.mapping_table)
         
-        # 创建����柄��器
+        # 创建柄器
         grip_container = QWidget()
         grip_layout = QHBoxLayout(grip_container)
         grip_layout.setContentsMargins(0, 0, 0, 0)
@@ -1012,7 +914,7 @@ class TableMappingTab(QWidget):
             QMessageBox.warning(self, "错误", f"保存历史配置失败: {str(e)}")
             
     def update_history_combo(self):
-        """更新历史配置下拉框"""
+        """更新历史配下拉框"""
         self.history_combo.clear()
         self.history_combo.addItem("默认配置")
         for config in self.mapping_history['configurations']:
@@ -1133,7 +1035,7 @@ class TableMappingTab(QWidget):
             self.mapping_table.setItem(i, 1, QTableWidgetItem(api_field))
             self.mapping_table.setItem(i, 2, QTableWidgetItem(description))
         
-        # 静默保存默认配置
+        # 静保存默认配置
         try:
             mapping_config = {
                 'table_name': 'retail_data',
@@ -1195,7 +1097,7 @@ class TableMappingTab(QWidget):
             
         # 数据库字段输入框
         db_field_input = QLineEdit()
-        db_field_input.setPlaceholderText("输入您的数据库字段名")
+        db_field_input.setPlaceholderText("输入的数据库字段名")
         db_field_input.setStyleSheet("""
             QLineEdit {
                 padding: 5px;
@@ -1210,7 +1112,7 @@ class TableMappingTab(QWidget):
         
         layout.addLayout(form_layout)
         
-        # 按钮布局
+        # 按钮局
         button_layout = QHBoxLayout()
         
         add_button = QPushButton("添加")
@@ -1251,13 +1153,13 @@ class TableMappingTab(QWidget):
         
         dialog.setLayout(layout)
         
-        # 连���按钮信号
+        # 连按钮信号
         def on_add():
             api_field = api_field_combo.currentData()
             db_field = db_field_input.text().strip()
             
             if not db_field:
-                QMessageBox.warning(dialog, "错误", "请输入数据库字段��！")
+                QMessageBox.warning(dialog, "错误", "请输入数据库字段！")
                 return
                 
             # 检查是否已存在相同的映射
@@ -1290,7 +1192,7 @@ class TableMappingTab(QWidget):
         dialog.exec_()
 
     def delete_mapping(self):
-        """删除��中的映射行"""
+        """删除中的映射行"""
         current_row = self.mapping_table.currentRow()
         if current_row >= 0:
             self.mapping_table.removeRow(current_row)
@@ -1331,7 +1233,7 @@ class TableMappingTab(QWidget):
                 f.seek(0)
                 json.dump(config, f, indent=4, ensure_ascii=False)
                 f.truncate()
-            QMessageBox.information(self, "成功", "���射配���保存成功！")
+            QMessageBox.information(self, "成功", "映射配置保存成功！")
         except Exception as e:
             QMessageBox.warning(self, "错误", f"保存映射配置失败: {str(e)}")
             
@@ -1402,7 +1304,7 @@ class ImportTab(QWidget):
     def initUI(self):
         layout = QVBoxLayout()
         
-        # 添加模板生成按钮
+        # 添加模生成按钮
         template_button = QPushButton("生成导入模板")
         template_button.clicked.connect(self.create_template)
         template_button.setStyleSheet('''
@@ -1582,14 +1484,11 @@ class ImportTab(QWidget):
             # 读取Excel文件
             df = pd.read_excel(self.file_path.text())
             
-            # 处理列名，移除API字段名提示
-            df.columns = df.columns.map(lambda x: x.split(' (')[0] if ' (' in x else x)
+            # 清理列名（移除空格、换行符和特殊字符）
+            df.columns = df.columns.str.strip().str.replace('\n', '').str.replace('\r', '')
             
             # 打印原始列名用于调试
             print("原始列名:", df.columns.tolist())
-            
-            # 获取选择的映射配置
-            mapping_name = self.mapping_combo.currentText()
             
             # 设置默认映射关系
             field_mapping = {
@@ -1614,101 +1513,72 @@ class ImportTab(QWidget):
                 '场景标志': 'sceneflag'
             }
             
-            # 如果不是默认映射，则加载自定义映射配置
-            if mapping_name != "默认映射":
-                try:
-                    with open('excel_mapping_history.json', 'r', encoding='utf-8') as f:
-                        mappings = json.load(f)
-                        for config in mappings['configurations']:
-                            if config['name'] == mapping_name:
-                                field_mapping = config['mappings']
-                                break
-                except Exception as e:
-                    print(f"加载自定义映射配置失败: {str(e)}")
-                    # 如果加载失败，继续使用默认映射
+            # 反向映射（API字段名到中文名）
+            reverse_mapping = {v: k for k, v in field_mapping.items()}
+            
+            # 打印映射前的列名
+            print("映射前的列名:", df.columns.tolist())
+            
+            # 检查每个字段的映射
+            for excel_col in df.columns:
+                if excel_col in field_mapping:
+                    print(f"找到映射: {excel_col} -> {field_mapping[excel_col]}")
+                else:
+                    print(f"未找到映射: {excel_col}")
             
             # 使用映射配置重命名列
             df = df.rename(columns=field_mapping)
             
-            # 打印映射后的名用于调试
+            # 打印映射后的列名
             print("映射后的列名:", df.columns.tolist())
             
             # 验证必要字段
-            required_fields = {
-                'socialCreditCode': '统一社会信用代码',
-                'compName': '企业名称',
-                'retailStoreCode': '零售点编码',
-                'retailStoreName': '零售点名称',
-                'reportDate': '上报日期',
-                'selfCommondityCode': '商品编码',
-                'selfCommondityName': '商品名称',
-                'dataType': '数据类型',
-                'dataValue': '数据值',
-                'dataConvertFlag': '转换标志',
-                'supplierCode': '供应商编码',
-                'supplierName': '供应商名称',
-                'manufatureName': '生产商名称',
-                'originCode': '产地编码',
-                'originName': '产地名称',
-                'sceneflag': '场��标志'
-            }
-            
-            # 检查字段是否存在
-            missing_fields = []
-            for field, field_name in required_fields.items():
-                if field not in df.columns:
-                    missing_fields.append(field_name)
-                    print(f"缺少字段: {field_name} ({field})")  # 调试信息
-                    
+            required_fields = set(field_mapping.values())
+            missing_fields = required_fields - set(df.columns)
             if missing_fields:
-                QMessageBox.warning(self, "错误", f"缺少必要字段：{', '.join(missing_fields)}")
+                # 转换为中文字段名显示
+                missing_fields_cn = [reverse_mapping[f] for f in missing_fields]
+                QMessageBox.warning(self, "错误", f"缺少必要字段：{', '.join(missing_fields_cn)}")
                 return
                 
-            # 数据类型转换和验证
+            # 数据类型转换
             try:
-                # 转换日期格式
                 df['reportDate'] = pd.to_datetime(df['reportDate']).dt.strftime('%Y-%m-%d')
-                
-                # 确保数值字段为数字类型
                 df['dataType'] = df['dataType'].astype(int)
                 df['dataValue'] = df['dataValue'].astype(float)
                 df['dataConvertFlag'] = df['dataConvertFlag'].astype(int)
                 df['sceneflag'] = df['sceneflag'].astype(int)
-                
-                # 生成itemId
-                df['itemId'] = 'YN' + df['reportDate'].str.replace('-', '') + df.index.astype(str).str.zfill(6)
-                
             except Exception as e:
                 QMessageBox.warning(self, "错误", f"数据格式转换失败: {str(e)}")
                 return
                 
+            # 生成itemId
+            df['itemId'] = 'YN' + df['reportDate'].str.replace('-', '') + df.index.astype(str).str.zfill(6)
+            
             # 更新进度条
             self.progress_bar.setValue(30)
             
-            # 显示预览
-            self.preview_table.setRowCount(len(df))
-            self.preview_table.setColumnCount(len(df.columns))
-            self.preview_table.setHorizontalHeaderLabels(df.columns)
-            
-            for i in range(len(df)):
-                for j in range(len(df.columns)):
-                    value = str(df.iloc[i, j])
-                    self.preview_table.setItem(i, j, QTableWidgetItem(value))
-                    
-            # 存储导入的数据
-            self.imported_data = df.to_dict('records')
+            # 转换为列表
+            data_list = df.to_dict('records')
             
             # 更新进度条
+            self.progress_bar.setValue(60)
+            
+            # 保存到表格
+            self.data_table.setRowCount(len(data_list))
+            for i, data in enumerate(data_list):
+                for j, key in enumerate(data.keys()):
+                    item = QTableWidgetItem(str(data[key]))
+                    self.data_table.setItem(i, j, item)
+                    
+            # 更新进度条
             self.progress_bar.setValue(100)
+            self.progress_bar.setVisible(False)
             
-            # 启用上报按钮
-            self.upload_button.setEnabled(True)
-            
-            QMessageBox.information(self, "成功", f"成功导入 {len(df)} 条数据！")
+            QMessageBox.information(self, "成功", f"成功导入 {len(data_list)} 条数据")
             
         except Exception as e:
             QMessageBox.warning(self, "错误", f"导入失败: {str(e)}")
-        finally:
             self.progress_bar.setVisible(False)
             
     def upload_data(self):
@@ -1740,32 +1610,39 @@ class ImportTab(QWidget):
                 result = api.upload_retail_data(self.imported_data)
                 
                 if result and result.get("code") == 200:
-                    QMessageBox.information(self, "成功", "数据上报成功！")
-                    # 保存成功历史
+                    success_msg = "数据上报成功！\n\n详细信息：\n"
+                    for item in self.imported_data:
+                        success_msg += f"企业：{item.get('compName', '')}\n"
+                        success_msg += f"零售点：{item.get('retailStoreName', '')}\n"
+                        success_msg += f"商品：{item.get('selfCommondityName', '')}\n"
+                        success_msg += f"规格：{item.get('spec', '')}\n"
+                        success_msg += f"数据类型：{item.get('dataType', '')}\n"
+                        success_msg += f"数据值：{item.get('dataValue', '')}\n"
+                        success_msg += f"上报日期：{item.get('reportDate', '')}\n"
+                        success_msg += "-" * 50 + "\n\n"
+                    
+                    # 在日志显示区域更新信息
+                    self.log_display.clear()
+                    self.log_display.append(success_msg)
+                    
+                    # 保存历史记录
                     self.save_history(
                         status='成功',
                         data_count=len(self.imported_data),
-                        message=str(result.get("content", [])),
+                        message=str(result.get('content', [])),
                         error_detail=None,
-                        source='Excel导入'
+                        source='手动上报'
                     )
-                    # 刷新历史记录
-                    if self.main_window:
-                        self.main_window.refresh_history()
+                    
+                    # 刷新历史记录显示
+                    self.load_history()  # 重新加载历史记录
+                    self.history_table.refresh()  # 刷新表格显示
                 else:
                     QMessageBox.warning(self, "错误", f"上报失败: {str(result)}")
-                    # 保存失败历史
-                    self.save_history(
-                        status='失败',
-                        data_count=len(self.imported_data),
-                        message="上报失败",
-                        error_detail=str(result),
-                        source='Excel导入'  # 添加数据来源标识
-                    )
                     
             except Exception as e:
                 QMessageBox.warning(self, "错误", f"上报失败: {str(e)}")
-                # 保存错误历史
+                # 保存错���历史
                 self.save_history(
                     status='失败',
                     data_count=0,
@@ -1809,7 +1686,7 @@ class ImportTab(QWidget):
                 json.dump(history_data, f, indent=4, ensure_ascii=False)
                 
         except Exception as e:
-            print(f"保存历史记录失败: {str(e)}")
+            print(f"保存历����记录失败: {str(e)}")
 
     def create_template(self):
         """生成Excel模板文件"""
@@ -1832,8 +1709,8 @@ class ImportTab(QWidget):
             
             # 创建示例数据
             example_data = {
-                '统一��会信用代码 (socialCreditCode)': ['91532901792864164X1'] * 4,
-                '企业名称 (compName)': ['云南市方街商贸有限公司'] * 4,
+                '统一社会信用代码 (socialCreditCode)': ['91532901792864164X1'] * 4,
+                '企业名称 (compName)': ['云南市四方街商贸有限公司'] * 4,
                 '零售点编码 (retailStoreCode)': ['SFJRPA1234'] * 4,
                 '零售点名称 (retailStoreName)': ['四方街商贸零售点'] * 4,
                 '上报日期 (reportDate)': [datetime.now().strftime('%Y-%m-%d')] * 4,
@@ -1920,654 +1797,398 @@ class ImportTab(QWidget):
             QMessageBox.warning(self, "错误", f"生成模板文件失败: {str(e)}")
 
 class ExcelMappingTab(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.mapping_history_file = 'excel_mapping_history.json'
-        self.mapping_history = self.load_mapping_history()
-        self.initUI()
-        
-    def initUI(self):
-        """初始化UI"""
-        layout = QVBoxLayout()
-        
-        # 添加默认模板展示按钮
-        template_button = QPushButton("查看默认模板")
-        template_button.clicked.connect(self.show_default_template)
-        template_button.setStyleSheet('''
-            QPushButton {
-                background-color: #2196F3;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-                min-width: 120px;
-                margin-bottom: 10px;
-            }
-            QPushButton:hover {
-                background-color: #1976D2;
-            }
-        ''')
-        layout.addWidget(template_button, alignment=Qt.AlignRight)
-        
-        # 配置选择组
-        config_group = QGroupBox("Excel映射配置")
-        config_layout = QVBoxLayout()
-        
-        # 配置名称选择
-        config_select_layout = QHBoxLayout()
-        self.config_combo = QComboBox()
-        self.config_combo.currentIndexChanged.connect(self.on_config_selected)
-        
-        new_config_button = QPushButton("新建配置")
-        new_config_button.clicked.connect(self.create_new_config)
-        delete_config_button = QPushButton("删除配置")
-        delete_config_button.clicked.connect(self.delete_config)
-        
-        config_select_layout.addWidget(QLabel("选择配置:"))
-        config_select_layout.addWidget(self.config_combo)
-        config_select_layout.addWidget(new_config_button)
-        config_select_layout.addWidget(delete_config_button)
-        
-        config_layout.addLayout(config_select_layout)
-        config_group.setLayout(config_layout)
-        layout.addWidget(config_group)
-        
-        # 映射表格
-        mapping_group = QGroupBox("字段映射关系")
-        mapping_layout = QVBoxLayout()
-        
-        self.mapping_table = QTableWidget()
-        self.mapping_table.setColumnCount(3)
-        self.mapping_table.setHorizontalHeaderLabels(['Excel表头', '系统字段', '说明'])
-        self.mapping_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        
-        # 添加/删除映射按钮
-        button_layout = QHBoxLayout()
-        add_button = QPushButton("添加映射")
-        add_button.clicked.connect(self.add_mapping)
-        delete_button = QPushButton("删除映射")
-        delete_button.clicked.connect(self.delete_mapping)
-        
-        button_layout.addWidget(add_button)
-        button_layout.addWidget(delete_button)
-        
-        mapping_layout.addWidget(self.mapping_table)
-        mapping_layout.addLayout(button_layout)
-        
-        # 保存按钮
-        save_button = QPushButton("保存配置")
-        save_button.clicked.connect(self.save_config)
-        mapping_layout.addWidget(save_button)
-        
-        mapping_group.setLayout(mapping_layout)
-        layout.addWidget(mapping_group)
-        
-        # 帮助说明
-        help_text = QLabel("""
-        使用说明���
-        1. 创建新的映射配置并命名
-        2. 添加Excel表格中的表头与系统字段的对应关系
-        3. 保存配置后即可在导入Excel时使用
-        
-        注意：
-        - Excel表头填写实际的表格中的列名
-        - 系统字段必须与标准字段完全匹��
-        - 必须包含所有必要字段的映射关系
-        """)
-        help_text.setStyleSheet("""
-            QLabel {
-                background-color: #f8f9fa;
-                padding: 10px;
-                border-radius: 4px;
-                border: 1px solid #dee2e6;
-                color: #495057;
-            }
-        """)
-        layout.addWidget(help_text)
-        
-        self.setLayout(layout)
-        self.update_config_list()
-        
-    def create_new_config(self):
-        """创建新配置"""
-        dialog = QDialog(self)
-        dialog.setWindowTitle("新建映射配置")
-        dialog.setMinimumWidth(800)
-        dialog.setMinimumHeight(600)
-        
-        layout = QVBoxLayout()
-        
-        # 配置名称输入
-        name_layout = QHBoxLayout()
-        name_layout.addWidget(QLabel("配置名称:"))
-        name_input = QLineEdit()
-        name_layout.addWidget(name_input)
-        
-        # 添加导入按钮
-        import_button = QPushButton("导入Excel表头")
-        import_button.setStyleSheet('''
-            QPushButton {
-                background-color: #2196F3;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-            }
-            QPushButton:hover {
-                background-color: #1976D2;
-            }
-        ''')
-        name_layout.addWidget(import_button)
-        
-        layout.addLayout(name_layout)
-        
-        # 创建映射表格
-        mapping_table = QTableWidget()
-        mapping_table.setColumnCount(4)
-        mapping_table.setHorizontalHeaderLabels(['Excel表头', '系统字段', '说明', '是否映射'])
-        mapping_table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        layout.addWidget(mapping_table)
-        
-        # 获取系统字段列表
-        system_fields = self.get_system_fields()
-        
-        def import_excel():
-            """导入Excel获取表头"""
-            file_path, _ = QFileDialog.getOpenFileName(
-                dialog,
-                "选择Excel文件",
-                "",
-                "Excel Files (*.xlsx *.xls)"
-            )
-            
-            if file_path:
-                try:
-                    # 读取Excel表头
-                    df = pd.read_excel(file_path, nrows=0)
-                    excel_headers = df.columns.tolist()
-                    
-                    # 清空表格
-                    mapping_table.setRowCount(0)
-                    
-                    # 添加所有Excel表头
-                    for header in excel_headers:
-                        row = mapping_table.rowCount()
-                        mapping_table.insertRow(row)
-                        
-                        # Excel表头
-                        mapping_table.setItem(row, 0, QTableWidgetItem(header))
-                        
-                        # 添加系统字段下拉框
-                        combo = QComboBox()
-                        combo.addItem("-- 请选择 --", "")
-                        for field, desc in system_fields:
-                            combo.addItem(f"{field} ({desc})", field)
-                        mapping_table.setCellWidget(row, 1, combo)
-                        
-                        # 添加说明列
-                        mapping_table.setItem(row, 2, QTableWidgetItem(""))
-                        
-                        # 添加复选框
-                        checkbox = QCheckBox()
-                        checkbox_widget = QWidget()
-                        checkbox_layout = QHBoxLayout(checkbox_widget)
-                        checkbox_layout.addWidget(checkbox)
-                        checkbox_layout.setAlignment(Qt.AlignCenter)
-                        checkbox_layout.setContentsMargins(0, 0, 0, 0)
-                        mapping_table.setCellWidget(row, 3, checkbox_widget)
-                        
-                        # 自动匹配系统字段
-                        for i in range(combo.count()):
-                            field_data = combo.itemData(i)
-                            if field_data and field_data.lower() in header.lower().replace(" ", ""):
-                                combo.setCurrentIndex(i)
-                                checkbox.setChecked(True)
-                                # 更新说明
-                                for field, desc in system_fields:
-                                    if field == field_data:
-                                        mapping_table.setItem(row, 2, QTableWidgetItem(desc))
-                                        break
-                                break
-                        
-                        # 连接下拉框信号
-                        def on_field_selected(index, row=row):
-                            field = combo.itemData(index)
-                            checkbox = mapping_table.cellWidget(row, 3).findChild(QCheckBox)
-                            checkbox.setChecked(bool(field))
-                            # 更新说明
-                            for f, desc in system_fields:
-                                if f == field:
-                                    mapping_table.setItem(row, 2, QTableWidgetItem(desc))
-                                    break
-                        
-                        combo.currentIndexChanged.connect(on_field_selected)
-                        
-                except Exception as e:
-                    QMessageBox.warning(dialog, "错误", f"导入Excel失败: {str(e)}")
-        
-        import_button.clicked.connect(import_excel)
-        
-        # 添加按钮
-        button_layout = QHBoxLayout()
-        save_button = QPushButton("保存")
-        cancel_button = QPushButton("取消")
-        
-        save_button.setStyleSheet('''
-            QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-                min-width: 100px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-        ''')
-        
-        cancel_button.setStyleSheet('''
-            QPushButton {
-                background-color: #f44336;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-                min-width: 100px;
-            }
-            QPushButton:hover {
-                background-color: #d32f2f;
-            }
-        ''')
-        
-        button_layout.addWidget(save_button)
-        button_layout.addWidget(cancel_button)
-        layout.addLayout(button_layout)
-        
-        def save_config():
-            """保存配置"""
-            name = name_input.text().strip()
-            if not name:
-                QMessageBox.warning(dialog, "错误", "请输入配置名称！")
-                return
-            
-            if name in [self.config_combo.itemText(i) for i in range(self.config_combo.count())]:
-                QMessageBox.warning(dialog, "错误", "配置名称已存在！")
-                return
-            
-            # 收集映射关系
-            mappings = {}
-            for row in range(mapping_table.rowCount()):
-                checkbox = mapping_table.cellWidget(row, 3).findChild(QCheckBox)
-                if checkbox.isChecked():
-                    excel_field = mapping_table.item(row, 0).text()
-                    combo = mapping_table.cellWidget(row, 1)
-                    system_field = combo.currentData()
-                    if system_field:
-                        mappings[excel_field] = system_field
-                        
-            if not mappings:
-                QMessageBox.warning(dialog, "错误", "请至少选择一个映射关系！")
-                return
-            
-            # 保存配置
-            self.mapping_history['configurations'].append({
-                'name': name,
-                'mappings': mappings
-            })
-            self.save_mapping_history()
-            self.update_config_list()
-            self.config_combo.setCurrentText(name)
-            
-            QMessageBox.information(dialog, "成功", "配置保存成功！")
-            dialog.accept()
-        
-        save_button.clicked.connect(save_config)
-        cancel_button.clicked.connect(dialog.reject)
-        
-        dialog.setLayout(layout)
-        dialog.exec_()
-    
-    def load_mapping_history(self):
-        """加载映射配置历史"""
-        try:
-            if os.path.exists(self.mapping_history_file):
-                with open(self.mapping_history_file, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            return {'configurations': []}
-        except Exception as e:
-            print(f"加载映射配置失败: {str(e)}")
-            return {'configurations': []}
-            
-    def save_mapping_history(self):
-        """保存映射配置历史"""
-        try:
-            with open(self.mapping_history_file, 'w', encoding='utf-8') as f:
-                json.dump(self.mapping_history, f, indent=4, ensure_ascii=False)
-        except Exception as e:
-            QMessageBox.warning(self, "错误", f"保存映射配置失败: {str(e)}")
-            
-    def update_config_list(self):
-        """更新配置列表"""
-        self.config_combo.clear()
-        
-        # 添加默认配置
-        default_mappings = {
-            '统一社会信用代码': 'socialCreditCode',
-            '企业名称': 'compName',
-            '零售点编码': 'retailStoreCode',
-            '零售点名称': 'retailStoreName',
-            '上报日期': 'reportDate',
-            '商品编码': 'selfCommondityCode',
-            '商品名称': 'selfCommondityName',
-            '单位': 'unit',
-            '规格': 'spec',
-            '条码': 'barcode',
-            '数据类型': 'dataType',
-            '数据值': 'dataValue',
-            '转换标志': 'dataConvertFlag',
-            '供应商编码': 'supplierCode',
-            '供应商名称': 'supplierName',
-            '生产商名称': 'manufatureName',
-            '产地编码': 'originCode',
-            '产地名称': 'originName',
-            '场景标志': 'sceneflag'
-        }
-        
-        # 添加默认配置到历史记录中
-        if not any(config['name'] == '默认配置' for config in self.mapping_history['configurations']):
-            self.mapping_history['configurations'].insert(0, {
-                'name': '默认配置',
-                'mappings': default_mappings
-            })
-            self.save_mapping_history()
-        
-        # 更新下拉框
-        for config in self.mapping_history['configurations']:
-            self.config_combo.addItem(config['name'])
-            
-    def on_config_selected(self, index):
-        """配置选择改变时的处理"""
-        if index < 0:
-            return
-            
-        config_name = self.config_combo.currentText()
-        
-        # 加载配置
-        for config in self.mapping_history['configurations']:
-            if config['name'] == config_name:
-                self.load_mapping_table(config['mappings'])
-                
-                # 如果是默认配置，禁用删除按钮
-                delete_button = self.findChild(QPushButton, "delete_config_button")
-                if delete_button:
-                    delete_button.setEnabled(config_name != '默认配置')
-                break
-                
-    def load_mapping_table(self, mappings):
-        """加载映射关系到表格"""
-        self.mapping_table.setRowCount(0)
-        for excel_field, system_field in mappings.items():
-            row = self.mapping_table.rowCount()
-            self.mapping_table.insertRow(row)
-            self.mapping_table.setItem(row, 0, QTableWidgetItem(excel_field))
-            self.mapping_table.setItem(row, 1, QTableWidgetItem(system_field))
-            # 找到对应的说明
-            for field, desc in self.get_system_fields():
-                if field == system_field:
-                    self.mapping_table.setItem(row, 2, QTableWidgetItem(desc))
-                    break
-                    
-    def get_system_fields(self):
-        """获取系统标准字段列表"""
-        return [
-            ('socialCreditCode', '统一社会信用代码'),
-            ('compName', '企业名称'),
-            ('retailStoreCode', '零售点编码'),
-            ('retailStoreName', '零售点名称'),
-            ('reportDate', '上报日期'),
-            ('selfCommondityCode', '商品编码'),
-            ('selfCommondityName', '商品名称'),
-            ('unit', '单位'),
-            ('spec', '规格'),
-            ('barcode', '条码'),
-            ('dataType', '数据类型'),
-            ('dataValue', '数据值'),
-            ('dataConvertFlag', '转换标志'),
-            ('supplierCode', '供应商编码'),
-            ('supplierName', '供应商名称'),
-            ('manufatureName', '生产商名称'),
-            ('originCode', '产地编码'),
-            ('originName', '产地名称'),
-            ('sceneflag', '场景标志')
-        ]
-            
-    def delete_mapping(self):
-        """删除选中的映射关系"""
-        current_row = self.mapping_table.currentRow()
-        if current_row >= 0:
-            self.mapping_table.removeRow(current_row)
-            
+    def __init__(self):
+        super().__init__()
+        self.mapping_history = {'configurations': []}  # 初始化映射历史
+        self.mapping_table = None
+        self.config_combo = None
+        self.init_ui()
+        self.load_mapping_history()
+
     def delete_config(self):
         """删除当前配置"""
         current_config = self.config_combo.currentText()
         if not current_config:
+            QMessageBox.warning(self, "错误", "请先选择要删除的配置！")
             return
             
-        reply = QMessageBox.question(
-            self,
-            "确认删除",
-            f"确定要删除配置 '{current_config}' 吗？此操作不可恢复。",
-            QMessageBox.Yes | QMessageBox.No,
-            QMessageBox.No
-        )
-        
+        # 确认删除
+        reply = QMessageBox.question(self, '确认删除', 
+                                   f'确定要删除配置 "{current_config}" 吗？',
+                                   QMessageBox.Yes | QMessageBox.No)
+                                   
         if reply == QMessageBox.Yes:
+            # 从历史记录中删除
             self.mapping_history['configurations'] = [
                 config for config in self.mapping_history['configurations']
                 if config['name'] != current_config
             ]
+            
+            # 保存到文件
             self.save_mapping_history()
+            
+            # 更新配置列表
             self.update_config_list()
             
-    def save_config(self):
-        """保存当前配置"""
-        current_config = self.config_combo.currentText()
-        if not current_config:
-            QMessageBox.warning(self, "错误", "请先选择或创建一个配置！")
-            return
+            # 清空表格
+            self.mapping_table.setRowCount(0)
             
-        # 收集当前表格中的映射关系
-        mappings = {}
-        for row in range(self.mapping_table.rowCount()):
-            excel_field = self.mapping_table.item(row, 0).text()
-            system_field = self.mapping_table.item(row, 1).text()
-            mappings[excel_field] = system_field
-            
-        # 更新配置
-        for config in self.mapping_history['configurations']:
-            if config['name'] == current_config:
-                config['mappings'] = mappings
-                break
-                
-        self.save_mapping_history()
-        QMessageBox.information(self, "成功", "配置保存成功！")
+            QMessageBox.information(self, "成功", "配置已删除！")
 
     def add_mapping(self):
-        """添加新的映射关系"""
-        dialog = QDialog(self)
-        dialog.setWindowTitle("添加字段映射")
+        """添加字段映射"""
+        # 获取当前行数
+        current_row = self.mapping_table.rowCount()
+        self.mapping_table.insertRow(current_row)
         
-        layout = QFormLayout()
+        # 添加Excel字段输入框
+        excel_field = QTableWidgetItem("")
+        self.mapping_table.setItem(current_row, 0, excel_field)
         
-        excel_field = QLineEdit()
-        system_field = QComboBox()
+        # 添加API字段选择框
+        api_field = QTableWidgetItem("")
+        self.mapping_table.setItem(current_row, 1, api_field)
         
-        # 添加系统标准字段
-        for field, desc in self.get_system_fields():
-            system_field.addItem(f"{field} ({desc})", field)
-            
-        layout.addRow("Excel表头:", excel_field)
-        layout.addRow("系统字段:", system_field)
-        
-        buttons = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel,
-            Qt.Horizontal, dialog
-        )
-        buttons.accepted.connect(dialog.accept)
-        buttons.rejected.connect(dialog.reject)
-        
-        layout.addRow(buttons)
-        dialog.setLayout(layout)
-        
-        if dialog.exec_() == QDialog.Accepted:
-            if not excel_field.text().strip():
-                QMessageBox.warning(self, "错误", "Excel表头不能为空！")
-                return
-                
-            # 检查是否已存在相同的映射
-            for row in range(self.mapping_table.rowCount()):
-                existing_excel = self.mapping_table.item(row, 0)
-                existing_system = self.mapping_table.item(row, 1)
-                if existing_excel and existing_excel.text() == excel_field.text():
-                    QMessageBox.warning(self, "错误", "该Excel表头已存在映射关系！")
-                    return
-                if existing_system and existing_system.text() == system_field.currentData():
-                    QMessageBox.warning(self, "错误", "该系统字段已存在映射关系！")
-                    return
-                    
-            # 添加新行
-            row = self.mapping_table.rowCount()
-            self.mapping_table.insertRow(row)
-            self.mapping_table.setItem(row, 0, QTableWidgetItem(excel_field.text()))
-            selected_field = system_field.currentData()
-            self.mapping_table.setItem(row, 1, QTableWidgetItem(selected_field))
-            
-            # 找到对应的说明
-            for field, desc in self.get_system_fields():
-                if field == selected_field:
-                    self.mapping_table.setItem(row, 2, QTableWidgetItem(desc))
-                    break
+        # 添加说明
+        description = QTableWidgetItem("必填字段")
+        self.mapping_table.setItem(current_row, 2, description)
 
-    def show_default_template(self):
-        """展示默认模板"""
-        dialog = QDialog(self)
-        dialog.setWindowTitle("默认Excel模板")
-        dialog.setMinimumWidth(800)
-        dialog.setMinimumHeight(600)
-        
+    def init_ui(self):
         layout = QVBoxLayout()
         
-        # 创建表格
-        table = QTableWidget()
-        table.setColumnCount(4)
-        table.setHorizontalHeaderLabels(['字段名称', '示例值', '说明', '是否必填'])
-        table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # 配置选择区域
+        config_group = QGroupBox("配置管理")
+        config_layout = QHBoxLayout()
         
-        # 默认模板数���
-        template_data = [
-            ('统一社会信用代码', '91532901792864164X1', '企业统一社会信用代码', '是'),
-            ('企业名称', '云南市四方街商贸有限公司', '企业全称', '是'),
-            ('零售点编码', 'SFJRPA1234', '零售点唯一编码', '是'),
-            ('零售点名称', '四方街商贸零售点', '零售点名称', '是'),
-            ('上报日期', '2024-03-22', '数据日期（格式：YYYY-MM-DD）', '是'),
-            ('商品编码', '170060', '商品唯一编码', '是'),
-            ('商品名称', '大白菜', '商品名称', '是'),
-            ('单位', '公斤', '计量单位', '是'),
-            ('规格', '散装', '商��规格', '是'),
-            ('条码', '170060', '商品条形码', '是'),
-            ('数据类型', '1/2/3/4', '1期初库存、2入库量、3销售量、4价格', '是'),
-            ('数据值', '100.00', '对应数据类型的数值', '是'),
-            ('转换标志', '2', '默认值2', '是'),
-            ('供应商编码', 'SUP001', '供应商编码', '是'),
-            ('供应商名称', '大理批发市场', '供应商名称', '是'),
-            ('生产商名称', '大理蔬菜基地', '生产厂家名称', '是'),
-            ('产地编码', '530000', '产地编码', '是'),
-            ('产地名称', '云南省', '产地名称', '是'),
-            ('场景标志', '1', '场景标志（默认值1）', '是')
+        self.config_combo = QComboBox()
+        self.config_combo.currentIndexChanged.connect(self.on_config_selected)
+        
+        save_as_button = QPushButton("保存为新配置")
+        save_as_button.clicked.connect(self.save_as_new_config)
+        delete_button = QPushButton("删除当前配置")
+        delete_button.clicked.connect(self.delete_config)
+        
+        config_layout.addWidget(self.config_combo)
+        config_layout.addWidget(save_as_button)
+        config_layout.addWidget(delete_button)
+        config_group.setLayout(config_layout)
+        
+        # 映射表格
+        self.mapping_table = QTableWidget()
+        self.mapping_table.setColumnCount(3)
+        self.mapping_table.setHorizontalHeaderLabels(['Excel字段', 'API字段', '说明'])
+        
+        # 添加字段按钮
+        add_button = QPushButton("添加字段映射")
+        add_button.clicked.connect(self.add_mapping)
+        
+        layout.addWidget(config_group)
+        layout.addWidget(self.mapping_table)
+        layout.addWidget(add_button)
+        
+        self.setLayout(layout)
+        
+        # 显示默认配置
+        self.display_config()
+
+    def save_as_new_config(self):
+        """保存为新配置"""
+        try:
+            name, ok = QInputDialog.getText(self, '新建配置', '请输入配置名称:')
+            if ok and name:
+                # 检查是否已存在同名配置
+                for config in self.mapping_history['configurations']:
+                    if config['name'] == name:
+                        QMessageBox.warning(self, "错误", "配置名称已存在！")
+                        return
+                
+                # 获取当前映射关系
+                fields = {}
+                for row in range(self.mapping_table.rowCount()):
+                    excel_field = self.mapping_table.item(row, 0)
+                    api_field = self.mapping_table.item(row, 1)
+                    
+                    if excel_field and api_field:
+                        fields[excel_field.text()] = api_field.text()
+                
+                # 创建新配置
+                new_config = {
+                    'name': name,
+                    'fields': fields
+                }
+                
+                # 添加到历史记录
+                self.mapping_history['configurations'].append(new_config)
+                
+                # 保存到文件
+                self.save_mapping_history()
+                
+                # 更新配置列表
+                self.update_config_list()
+                
+                # 选择新配置
+                self.config_combo.setCurrentText(name)
+                
+                QMessageBox.information(self, "成功", "配置保存成功！")
+                
+        except Exception as e:
+            QMessageBox.warning(self, "错误", f"保存配置失败: {str(e)}")
+
+    def load_mapping_history(self):
+        """加载映射历史"""
+        try:
+            if os.path.exists('mapping_history.json'):
+                with open('mapping_history.json', 'r', encoding='utf-8') as f:
+                    self.mapping_history = json.load(f)
+            else:
+                # 创建默认配置
+                self.mapping_history = {
+                    'configurations': [
+                        {
+                            'name': '默认配置',
+                            'fields': {
+                                '统一社会信用代码': 'socialCreditCode',
+                                '企业名称': 'compName',
+                                '零售点编码': 'retailStoreCode',
+                                '零售点名称': 'retailStoreName',
+                                '上报日期': 'reportDate',
+                                '商品编码': 'selfCommondityCode',
+                                '商品名称': 'selfCommondityName',
+                                '单位': 'unit',
+                                '规格': 'spec',
+                                '条码': 'barcode',
+                                '数据类型': 'dataType',
+                                '数据值': 'dataValue',
+                                '转换标志': 'dataConvertFlag',
+                                '供应商编码': 'supplierCode',
+                                '供应商名称': 'supplierName',
+                                '生产商名称': 'manufatureName',
+                                '产地编码': 'originCode',
+                                '产地名称': 'originName',
+                                '场景标志': 'sceneflag'
+                            }
+                        }
+                    ]
+                }
+                self.save_mapping_history()
+                
+            self.update_config_list()
+            
+        except Exception as e:
+            QMessageBox.warning(self, "错误", f"加载映射历史失败: {str(e)}")
+
+    def save_mapping_history(self):
+        """保存映射历史"""
+        try:
+            with open('excel_mapping_history.json', 'w', encoding='utf-8') as f:
+                json.dump(self.mapping_history, f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            QMessageBox.warning(self, "错误", f"保存映射历史失败: {str(e)}")
+
+    def update_config_list(self):
+        """更新配置列表"""
+        self.config_combo.clear()
+        for config in self.mapping_history['configurations']:
+            self.config_combo.addItem(config['name'])
+
+    def on_config_selected(self, index):
+        """配置选择变更"""
+        try:
+            if index >= 0:
+                config_name = self.config_combo.currentText()
+                for config in self.mapping_history['configurations']:
+                    if config['name'] == config_name:
+                        # 转换配置格式
+                        fields = []
+                        for excel_field, api_field in config.get('fields', {}).items():
+                            fields.append({
+                                'name': excel_field,
+                                'api_field': api_field,
+                                'type': 'string',
+                                'required': True,
+                                'description': '必填字段'
+                            })
+                        self.display_config(fields)
+                        break
+        except Exception as e:
+            print(f"配置选择错误: {str(e)}")
+
+    def display_config(self, fields=None):
+        """显示配置到表格"""
+        try:
+            # 清空表格
+            self.mapping_table.setRowCount(0)
+            
+            # 如果没有传入字段，使用默认字段
+            if fields is None:
+                fields = self.get_default_fields()
+                
+            # 显示配置
+            self.mapping_table.setRowCount(len(fields))
+            for i, field in enumerate(fields):
+                # Excel字段
+                excel_field = QTableWidgetItem(field.get('excel_field', ''))
+                self.mapping_table.setItem(i, 0, excel_field)
+                
+                # API字段
+                api_field = QTableWidgetItem(field.get('api_field', ''))
+                self.mapping_table.setItem(i, 1, api_field)
+                
+                # 字段说明
+                description = QTableWidgetItem(field.get('description', '必填字段'))
+                self.mapping_table.setItem(i, 2, description)
+                
+            # 调整列宽
+            self.mapping_table.resizeColumnsToContents()
+            
+        except Exception as e:
+            QMessageBox.warning(self, "错误", f"显示配置失败: {str(e)}")
+            print(f"显示配置失败: {str(e)}")  # 添加调试信息
+
+    def get_default_fields(self):
+        """获取默认字段配置"""
+        return [
+            {
+                'name': '统一社会信用代码',
+                'api_field': 'socialCreditCode',
+                'type': 'string',
+                'required': True,
+                'description': '企业统一社会信用代码'
+            },
+            {
+                'name': '企业名称',
+                'api_field': 'compName',
+                'type': 'string',
+                'required': True,
+                'description': '企业全称'
+            },
+            {
+                'name': '零售点编码',
+                'api_field': 'retailStoreCode',
+                'type': 'string',
+                'required': True,
+                'description': '零售点唯一编码'
+            },
+            {
+                'name': '零售点名称',
+                'api_field': 'retailStoreName',
+                'type': 'string',
+                'required': True,
+                'description': '零售点名称'
+            },
+            {
+                'name': '上报日期',
+                'api_field': 'reportDate',
+                'type': 'date',
+                'required': True,
+                'description': '数据日期（格式：YYYY-MM-DD）'
+            },
+            {
+                'name': '商品编码',
+                'api_field': 'selfCommondityCode',
+                'type': 'string',
+                'required': True,
+                'description': '商品唯一编码'
+            },
+            {
+                'name': '商品名称',
+                'api_field': 'selfCommondityName',
+                'type': 'string',
+                'required': True,
+                'description': '商品名称'
+            },
+            {
+                'name': '单位',
+                'api_field': 'unit',
+                'type': 'string',
+                'required': True,
+                'description': '计量单位'
+            },
+            {
+                'name': '规格',
+                'api_field': 'spec',
+                'type': 'string',
+                'required': True,
+                'description': '商品规格'
+            },
+            {
+                'name': '条码',
+                'api_field': 'barcode',
+                'type': 'string',
+                'required': True,
+                'description': '商品条形码'
+            },
+            {
+                'name': '数据类型',
+                'api_field': 'dataType',
+                'type': 'int',
+                'required': True,
+                'description': '1进货量、2零售量、3库存量、4价格'
+            },
+            {
+                'name': '数据值',
+                'api_field': 'dataValue',
+                'type': 'float',
+                'required': True,
+                'description': '对应数据类型的数值'
+            },
+            {
+                'name': '转换标志',
+                'api_field': 'dataConvertFlag',
+                'type': 'int',
+                'required': True,
+                'description': '默认值2'
+            },
+            {
+                'name': '供应商编码',
+                'api_field': 'supplierCode',
+                'type': 'string',
+                'required': True,
+                'description': '供应商编码'
+            },
+            {
+                'name': '供应商名称',
+                'api_field': 'supplierName',
+                'type': 'string',
+                'required': True,
+                'description': '供应商名称'
+            },
+            {
+                'name': '生产商名称',
+                'api_field': 'manufatureName',
+                'type': 'string',
+                'required': True,
+                'description': '生产厂家名称'
+            },
+            {
+                'name': '产地编码',
+                'api_field': 'originCode',
+                'type': 'string',
+                'required': True,
+                'description': '产地编码'
+            },
+            {
+                'name': '产地名称',
+                'api_field': 'originName',
+                'type': 'string',
+                'required': True,
+                'description': '产地名称'
+            },
+            {
+                'name': '场景标志',
+                'api_field': 'sceneflag',
+                'type': 'int',
+                'required': True,
+                'description': '场景标志（默认值1）'
+            }
         ]
-        
-        # 填充数据
-        table.setRowCount(len(template_data))
-        for i, (field, example, desc, required) in enumerate(template_data):
-            table.setItem(i, 0, QTableWidgetItem(field))
-            table.setItem(i, 1, QTableWidgetItem(example))
-            table.setItem(i, 2, QTableWidgetItem(desc))
-            required_item = QTableWidgetItem(required)
-            required_item.setForeground(Qt.red if required == '是' else Qt.black)
-            table.setItem(i, 3, required_item)
-        
-        # ���置表格样式
-        table.setStyleSheet("""
-            QTableWidget {
-                background-color: white;
-                border: 1px solid #d0d0d0;
-                border-radius: 4px;
-            }
-            QTableWidget::item {
-                padding: 5px;
-            }
-            QHeaderView::section {
-                background-color: #f5f5f5;
-                padding: 5px;
-                border: none;
-                border-right: 1px solid #d0d0d0;
-                border-bottom: 1px solid #d0d0d0;
-            }
-        """)
-        
-        layout.addWidget(table)
-        
-        # 添加说明文本
-        help_text = QLabel("""
-        说明：
-        1. 所有字段都必须按照示例格式填写
-        2. 日期必须使用 YYYY-MM-DD 格式
-        3. 数据类型对应关系：
-           - 1: 期初库存
-           - 2: 入库量
-           - 3: 销售量
-           - 4: 价格
-        4. 转换标志统一填写 2
-        5. 场景标志统一填写 1
-        """)
-        help_text.setStyleSheet("""
-            QLabel {
-                background-color: #f8f9fa;
-                padding: 10px;
-                border-radius: 4px;
-                border: 1px solid #dee2e6;
-                color: #495057;
-            }
-        """)
-        layout.addWidget(help_text)
-        
-        # 添加关闭按钮
-        close_button = QPushButton("关闭")
-        close_button.clicked.connect(dialog.close)
-        close_button.setStyleSheet('''
-            QPushButton {
-                background-color: #2196F3;
-                color: white;
-                padding: 8px;
-                border: none;
-                border-radius: 4px;
-                min-width: 100px;
-            }
-            QPushButton:hover {
-                background-color: #1976D2;
-            }
-        ''')
-        layout.addWidget(close_button, alignment=Qt.AlignRight)
-        
-        dialog.setLayout(layout)
-        dialog.exec_()
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
-        
+        self.load_history()  # 初始化时加载历史记录
+
     def initUI(self):
         self.setWindowTitle('零售数据上报工具')
         self.setGeometry(100, 100, 1000, 600)
@@ -2645,16 +2266,84 @@ class MainWindow(QMainWindow):
         self.log_display.append(message)
         
     def start_upload(self):
-        """开始上报数据"""
-        self.upload_button.setEnabled(False)
-        self.log_display.clear()
-        
-        self.worker = WorkerThread()
-        self.worker.update_signal.connect(self.log)
-        self.worker.finished_signal.connect(self.handle_finished)
-        self.worker.refresh_history_signal.connect(self.refresh_history)  # 连接刷新历史信号
-        self.worker.start()
-        
+        """开始执行数据上报"""
+        try:
+            print("开始执行数据上报...")
+            
+            # 加载配置
+            with open('config.json', 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                
+            # 创建数据库连接
+            db_config = config.get('database', {})
+            db = DatabaseConnection(
+                host=db_config.get('host', 'localhost'),
+                user=db_config.get('user', 'root'),
+                password=db_config.get('password', ''),
+                database=db_config.get('database', 'retail_report'),
+                port=db_config.get('port', 3306),
+                db_type=db_config.get('type', 'mysql')  # 使用 db_type 参数
+            )
+            
+            # 创建API客户端
+            api_config = config.get('api', {})
+            api = RetailAPI(api_config.get('url', ''))
+            
+            print("正在登录系统...")
+            if not api.login(api_config.get('username', ''), api_config.get('password', '')):  # 删除多余的括号
+                QMessageBox.warning(self, "错误", "系统登录失败")
+                return
+                
+            print("正在获取数据...")
+            data = db.get_retail_data()
+            if not data:
+                QMessageBox.warning(self, "警告", "没有获取到需要上报的数据")
+                return
+                
+            print(f"获取到 {len(data)} 条数据，开始上报...")
+            result = api.upload_retail_data(data)
+            
+            if result and result.get('code') == 200:
+                # 显示优化后的数据信息
+                success_msg = f"数据上报成功！共上报 {len(data)} 条数据\n\n详细信息：\n"
+                for idx, item in enumerate(data, 1):
+                    success_msg += f"第 {idx} 条数据：\n"
+                    success_msg += f"企业：{item.get('compName', '')}\n"
+                    success_msg += f"零售点：{item.get('retailStoreName', '')}\n"
+                    success_msg += f"商品：{item.get('selfCommondityName', '')}\n"
+                    success_msg += f"规格：{item.get('spec', '')}\n"
+                    success_msg += f"数据类型：{item.get('dataType', '')}\n"
+                    success_msg += f"数据值：{item.get('dataValue', '')}\n"
+                    success_msg += f"上报日期：{item.get('reportDate', '')}\n"
+                    success_msg += "-" * 50 + "\n\n"
+                
+                # 清空并更新日志显示
+                self.log_display.clear()
+                self.log_display.append(success_msg)
+                
+                # 确保显示最新内容
+                self.log_display.verticalScrollBar().setValue(0)
+                QApplication.processEvents()  # 强制更新UI
+                
+                # 保存历史记录
+                self.save_history(
+                    status='成功',
+                    data_count=len(data),
+                    message=f"成功上报 {len(data)} 条数据",
+                    error_detail=None,
+                    source='手动上报'
+                )
+                
+                # 刷新历史记录显示
+                self.load_history()  # 重新加载历史记录
+                self.history_table.refresh()  # 刷新表格显示
+            else:
+                # 显示错误信息到日志区域
+                self.log_display.append(f"数据上报失败: {str(result)}")
+                
+        except Exception as e:
+            self.log_display.append(f"执行出错: {str(e)}")
+
     def handle_finished(self, success, message):
         """处理上报完成"""
         self.log(message)
@@ -2667,8 +2356,67 @@ class MainWindow(QMainWindow):
 
     def refresh_history(self):
         """刷新历史记录"""
-        if self.history_tab:
-            self.history_tab.refresh_history()
+        self.load_history()
+
+    def save_history(self, status, data_count, message, error_detail=None, source='手动上报'):
+        """保存上报历史到JSON文件"""
+        try:
+            history_file = 'upload_history.json'
+            history_data = []
+            
+            # 读取现有历史记录
+            if os.path.exists(history_file):
+                try:
+                    with open(history_file, 'r', encoding='utf-8') as f:
+                        history_data = json.load(f)
+                except:
+                    history_data = []
+            
+            # 添加新记录
+            new_record = {
+                'upload_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'status': status,
+                'data_count': data_count,
+                'message': message,
+                'error_detail': error_detail,
+                'source': source  # 添加数据来源标识
+            }
+            
+            # 将新记录添加到开头
+            history_data.insert(0, new_record)
+            
+            # 只保留最近100条记录
+            history_data = history_data[:100]
+            
+            # 保存到文件
+            with open(history_file, 'w', encoding='utf-8') as f:
+                json.dump(history_data, f, indent=4, ensure_ascii=False)
+                
+            # 刷新历史记录显示
+            self.refresh_history()
+                
+        except Exception as e:
+            print(f"保存历史记录失败: {str(e)}")
+
+    def load_history(self):
+        """加载上报历史记录"""
+        try:
+            history_file = 'upload_history.json'
+            if os.path.exists(history_file):
+                with open(history_file, 'r', encoding='utf-8') as f:
+                    history_data = json.load(f)
+                    
+                # 更新历史记录表格
+                self.history_table.setRowCount(len(history_data))
+                for row, record in enumerate(history_data):
+                    self.history_table.setItem(row, 0, QTableWidgetItem(record.get('upload_time', '')))
+                    self.history_table.setItem(row, 1, QTableWidgetItem(record.get('status', '')))
+                    self.history_table.setItem(row, 2, QTableWidgetItem(str(record.get('data_count', 0))))
+                    self.history_table.setItem(row, 3, QTableWidgetItem(record.get('message', '')))
+                    self.history_table.setItem(row, 4, QTableWidgetItem(record.get('source', '')))
+                    
+        except Exception as e:
+            print(f"加载历史记录失败: {str(e)}")
 
 class APIConfigTab(QWidget):
     def __init__(self, parent=None):
@@ -2685,7 +2433,7 @@ class APIConfigTab(QWidget):
         self.config_combo = QComboBox()
         self.config_combo.currentIndexChanged.connect(self.on_config_selected)
         
-        save_as_button = QPushButton("保存为新配置")
+        save_as_button = QPushButton("保存为配置")
         save_as_button.clicked.connect(self.save_as_new_config)
         delete_button = QPushButton("删除当前配置")
         delete_button.clicked.connect(self.delete_current_config)
@@ -2946,7 +2694,7 @@ class APIConfigTab(QWidget):
                     max_length = max(
                         df[col].astype(str).apply(len).max(),
                         len(col)
-                    )
+                    )  # 添加闭合括号
                     worksheet.column_dimensions[chr(65 + idx)].width = max_length + 2
                 
                 # 设置表头样式
@@ -2986,7 +2734,7 @@ class APIConfigTab(QWidget):
             QMessageBox.warning(self, "错误", f"保存配置历史失败: {str(e)}")
             
     def update_config_list(self):
-        """更新配置列表"""
+        """更新置列表"""
         self.config_combo.clear()
         
         # 确保默认配置存在
@@ -3006,6 +2754,7 @@ class APIConfigTab(QWidget):
         if index < 0:
             return
             
+        # 获取当前选中的配置名称
         config_name = self.config_combo.currentText()
         
         # 如果是默认配置，禁用删除按钮
@@ -3014,11 +2763,20 @@ class APIConfigTab(QWidget):
             delete_button.setEnabled(config_name != '默认配置')
             
         # 加载选中的配置
-        for config in self.config_history['configurations']:
-            if config['name'] == config_name:
-                self.display_config(config['fields'])
-                break
-                
+        if config_name == '默认配置':
+            # 使用默认字段配置
+            self.display_config(self.get_default_fields())
+        else:
+            # 加载自定义配置
+            for config in self.config_history['configurations']:
+                if config['name'] == config_name:
+                    # 确保配置中有 fields 字段
+                    fields = config.get('fields', [])
+                    if not fields:
+                        fields = self.get_default_fields()
+                    self.display_config(fields)
+                    break
+
     def save_as_new_config(self):
         """保存为新配置"""
         name, ok = QInputDialog.getText(self, '保存配置', '请输入配置名称:')
@@ -3031,7 +2789,7 @@ class APIConfigTab(QWidget):
                 QMessageBox.warning(self, "错误", "配置名称已存在！")
                 return
                 
-            # 收集当前配置
+            # 收集���前配置
             fields = []
             for row in range(self.config_table.rowCount()):
                 field = {
@@ -3085,74 +2843,85 @@ class APIConfigTab(QWidget):
                 'name': '统一社会信用代码',
                 'api_field': 'socialCreditCode',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '企业统一社会信用代码'
             },
             {
                 'name': '企业名称',
                 'api_field': 'compName',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '企业全称'
             },
             {
                 'name': '零售点编码',
                 'api_field': 'retailStoreCode',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '零售点唯一编码'
             },
             {
                 'name': '零售点名称',
                 'api_field': 'retailStoreName',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '零售点名称'
             },
             {
                 'name': '上报日期',
                 'api_field': 'reportDate',
                 'type': 'date',
-                'required': True
+                'required': True,
+                'description': '数据日期（格式：YYYY-MM-DD）'
             },
             {
                 'name': '商品编码',
                 'api_field': 'selfCommondityCode',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '商品唯一编码'
             },
             {
                 'name': '商品名称',
                 'api_field': 'selfCommondityName',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '商品名称'
             },
             {
                 'name': '单位',
                 'api_field': 'unit',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '计量单位'
             },
             {
                 'name': '规格',
                 'api_field': 'spec',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '商品规格'
             },
             {
                 'name': '条码',
                 'api_field': 'barcode',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '商品条形码'
             },
             {
                 'name': '数据类型',
                 'api_field': 'dataType',
                 'type': 'int',
                 'required': True,
-                'description': '1期初库存、2入库量、3销售量、4价格'
+                'description': '1进货量、2零售量、3库存量、4价格'
             },
             {
                 'name': '数据值',
                 'api_field': 'dataValue',
                 'type': 'float',
-                'required': True
+                'required': True,
+                'description': '对应数据类型的数值'
             },
             {
                 'name': '转换标志',
@@ -3165,38 +2934,43 @@ class APIConfigTab(QWidget):
                 'name': '供应商编码',
                 'api_field': 'supplierCode',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '供应商编码'
             },
             {
                 'name': '供应商名称',
                 'api_field': 'supplierName',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '供应商名称'
             },
             {
                 'name': '生产商名称',
                 'api_field': 'manufatureName',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '生产厂家名称'
             },
             {
                 'name': '产地编码',
                 'api_field': 'originCode',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '产地编码'
             },
             {
                 'name': '产地名称',
                 'api_field': 'originName',
                 'type': 'string',
-                'required': True
+                'required': True,
+                'description': '产地名称'
             },
             {
                 'name': '场景标志',
                 'api_field': 'sceneflag',
                 'type': 'int',
                 'required': True,
-                'description': '默认值1'
+                'description': '场景标志（默认值1）'
             }
         ]
 
@@ -3206,22 +2980,13 @@ class APIConfigTab(QWidget):
             # 清空表格
             self.config_table.setRowCount(0)
             
-            # 获取默认字段配置
-            default_fields = self.get_default_fields()
-            
             # 如果没有传入字段，使用默认字段
             if not fields:
-                fields = default_fields
+                fields = self.get_default_fields()
                 
-            # 确保所有必要字段都存在
-            field_dict = {field['api_field']: field for field in fields}
-            for default_field in default_fields:
-                if default_field['api_field'] not in field_dict:
-                    field_dict[default_field['api_field']] = default_field
-                    
             # 显示配置
-            self.config_table.setRowCount(len(field_dict))
-            for i, field in enumerate(field_dict.values()):
+            self.config_table.setRowCount(len(fields))
+            for i, field in enumerate(fields):
                 # 字段名称
                 name_item = QTableWidgetItem(field['name'])
                 self.config_table.setItem(i, 0, name_item)
@@ -3230,23 +2995,13 @@ class APIConfigTab(QWidget):
                 api_field_item = QTableWidgetItem(field['api_field'])
                 self.config_table.setItem(i, 1, api_field_item)
                 
-                # 字段类型
-                type_item = QTableWidgetItem(field.get('type', 'string'))
-                self.config_table.setItem(i, 2, type_item)
+                # 字段说明
+                description = field.get('description', '必填字段')
+                if field.get('required', True):
+                    description = f"[必填] {description}"
+                description_item = QTableWidgetItem(description)
+                self.config_table.setItem(i, 2, description_item)
                 
-                # 是否必填
-                required = field.get('required', True)
-                required_item = QTableWidgetItem('是' if required else '否')
-                required_item.setForeground(Qt.red if required else Qt.black)
-                self.config_table.setItem(i, 3, required_item)
-                
-                # 如果有字段说明，添加到工具提示
-                if 'description' in field:
-                    for col in range(4):
-                        item = self.config_table.item(i, col)
-                        if item:
-                            item.setToolTip(field['description'])
-                        
             # 调整列宽
             self.config_table.resizeColumnsToContents()
             

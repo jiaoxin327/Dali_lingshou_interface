@@ -47,6 +47,78 @@
                 "产地名称 (originName)": "originName",
                 "场景标志 (sceneflag)": "sceneflag"
             }
+        },
+        {
+            "name": "123",
+            "mappings": {
+                "统一社会信用代码 (socialCreditCode)": "socialCreditCode",
+                "企业名称 (compName)": "compName",
+                "零售点编码 (retailStoreCode)": "retailStoreCode",
+                "零售点名称 (retailStoreName)": "retailStoreName",
+                "上报日期 (reportDate)": "reportDate",
+                "商品编码 (selfCommondityCode)": "selfCommondityCode",
+                "商品名称 (selfCommondityName)": "selfCommondityName",
+                "单位 (unit)": "unit",
+                "规格 (spec)": "spec",
+                "条码 (barcode)": "barcode",
+                "数据类型 (dataType)": "dataType",
+                "数据值 (dataValue)": "dataValue",
+                "转换标志 (dataConvertFlag)": "dataConvertFlag",
+                "供应商编码 (supplierCode)": "supplierCode",
+                "供应商名称 (supplierName)": "supplierName",
+                "生产商名称 (manufatureName)": "manufatureName",
+                "产地编码 (originCode)": "originCode",
+                "产地名称 (originName)": "originName",
+                "场景标志 (sceneflag)": "sceneflag"
+            }
+        },
+        {
+            "name": "123456",
+            "mappings": {
+                "统一社会信用代码 (socialCreditCode)": "socialCreditCode",
+                "企业名称 (compName)": "compName",
+                "零售点编码 (retailStoreCode)": "retailStoreCode",
+                "零售点名称 (retailStoreName)": "retailStoreName",
+                "上报日期 (reportDate)": "reportDate",
+                "商品编码 (selfCommondityCode)": "selfCommondityCode",
+                "商品名称 (selfCommondityName)": "selfCommondityName",
+                "单位 (unit)": "unit",
+                "规格 (spec)": "spec",
+                "条码 (barcode)": "barcode",
+                "数据类型 (dataType)": "dataType",
+                "数据值 (dataValue)": "dataValue",
+                "转换标志 (dataConvertFlag)": "dataConvertFlag",
+                "供应商编码 (supplierCode)": "supplierCode",
+                "供应商名称 (supplierName)": "supplierName",
+                "生产商名称 (manufatureName)": "manufatureName",
+                "产地编码 (originCode)": "originCode",
+                "产地名称 (originName)": "originName",
+                "场景标志 (sceneflag)": "sceneflag"
+            }
+        },
+        {
+            "name": "888",
+            "mappings": {
+                "统一社会信用代码 (socialCreditCode)": "socialCreditCode",
+                "企业名称 (compName)": "compName",
+                "零售点编码 (retailStoreCode)": "retailStoreCode",
+                "零售点名称 (retailStoreName)": "retailStoreName",
+                "上报日期 (reportDate)": "reportDate",
+                "商品编码 (selfCommondityCode)": "selfCommondityCode",
+                "商品名称 (selfCommondityName)": "selfCommondityName",
+                "单位 (unit)": "unit",
+                "规格 (spec)": "spec",
+                "条码 (barcode)": "barcode",
+                "数据类型 (dataType)": "dataType",
+                "数据值 (dataValue)": "dataValue",
+                "转换标志 (dataConvertFlag)": "dataConvertFlag",
+                "供应商编码 (supplierCode)": "supplierCode",
+                "供应商名称 (supplierName)": "supplierName",
+                "生产商名称 (manufatureName)": "manufatureName",
+                "产地编码 (originCode)": "originCode",
+                "产地名称 (originName)": "originName",
+                "场景标志 (sceneflag)": "sceneflag"
+            }
         }
     ]
 }
